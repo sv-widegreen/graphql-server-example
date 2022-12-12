@@ -24,7 +24,7 @@ type Author {
 # case, the "books" query returns an array of zero or more Books (defined above).
 type Query {
     book(id: ID!): Book
-    books: [Book]
+    books(authorId: ID): [Book]
     author(id: ID!): Author
     authors: [Author]
 }
@@ -47,10 +47,12 @@ const authors = [
     {
         id: 1,
         name: 'Kate Chopin',
+        books: [1],
     },
     {
         id: 2,
         name: 'Paul Auster',
+        books: [2],
     },
 ];
 
@@ -58,7 +60,11 @@ const authors = [
 // This resolver retrieves books from the "books" array above.
 const resolvers = {
     Query: {
-        books: () => books,
+        books: (parent, args, contextValue, info) => {
+            if (args.authorId) {
+                return books.filter(book => book.author == args.authorId)}
+            return books
+        },
         book: (parent, args, contextValue, info) => {
             return books.find(book => book.id == args.id)
         },
