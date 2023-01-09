@@ -60,16 +60,16 @@ const authors = [
 // This resolver retrieves books from the "books" array above.
 const resolvers = {
     Query: {
-        books: (parent, args, contextValue, info) => {
+        books: (parent, args) => {
             if (args.authorId) {
                 return books.filter(book => book.author == args.authorId)}
             return books
         },
-        book: (parent, args, contextValue, info) => {
+        book: (parent, args) => {
             return books.find(book => book.id == args.id)
         },
         authors: () => authors,
-        author: (parent, args, contextValue, info) => {
+        author: (parent, args) => {
             return authors.find(author => author.id == args.id)
         },
     },
